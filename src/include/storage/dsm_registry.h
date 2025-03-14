@@ -17,6 +17,14 @@ extern void *GetNamedDSMSegment(const char *name, size_t size,
 								void (*init_callback) (void *ptr),
 								bool *found);
 
+extern void DetachNamedDSMSegment(const char *name, size_t size,
+								  void (*on_detach_callback) (void *),
+								  void *arg);
+
+extern void DestroyNamedDSMSegment(const char *name, size_t size,
+								   void (*on_detach_callback) (void *),
+								   void *arg);
+
 extern Size DSMRegistryShmemSize(void);
 extern void DSMRegistryShmemInit(void);
 

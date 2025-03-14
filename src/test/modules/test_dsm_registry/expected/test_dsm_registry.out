@@ -12,3 +12,15 @@ SELECT get_val_in_shmem();
              1236
 (1 row)
 
+SELECT detach_from_tdr_segment();
+ detach_from_tdr_segment 
+-------------------------
+ t
+(1 row)
+
+SELECT destroy_tdr_segment();
+ destroy_tdr_segment 
+---------------------
+ 
+(1 row)
+

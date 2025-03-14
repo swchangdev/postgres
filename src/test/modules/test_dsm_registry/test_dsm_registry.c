@@ -36,6 +36,12 @@ tdr_init_shmem(void *ptr)
 }
 
 static void
+reset_tdr_state_to_null(void *arg)
+{
+	tdr_state = NULL;
+}
+
+static void
 tdr_attach_shmem(void)
 {
 	bool		found;
@@ -73,4 +79,26 @@ get_val_in_shmem(PG_FUNCTION_ARGS)
 	LWLockRelease(&tdr_state->lck);
 
 	PG_RETURN_UINT32(ret);
+}
+
+PG_FUNCTION_INFO_V1(detach_from_tdr_segment);
+Datum
+detach_from_tdr_segment(PG_FUNCTION_ARGS)
+{
+	DetachNamedDSMSegment("test_dsm_registry",
+						  sizeof(TestDSMRegistryStruct),
+						  reset_tdr_state_to_null, NULL);
+
+	PG_RETURN_BOOL(tdr_state == NULL);
+}
+
+PG_FUNCTION_INFO_V1(destroy_tdr_segment);
+Datum
+destroy_tdr_segment(PG_FUNCTION_ARGS)
+{
+	DestroyNamedDSMSegment("test_dsm_registry",
+						   sizeof(TestDSMRegistryStruct),
+						   NULL, NULL);
+
+	PG_RETURN_VOID();
 }
